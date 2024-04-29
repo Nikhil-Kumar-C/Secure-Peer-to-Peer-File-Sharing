@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Secure File Sharing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Styling for the form containers */
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f2f2f2;
+        padding: 20px;
+        margin: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Styling for the input fields */
+      input[type=text] {
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: none;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      /* Styling for the submit buttons */
+      input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease-in-out;
+      }
+
+      input[type=submit]:hover {
+        background-color: #3e8e41;
+      }
+
+      /* Styling for the page title */
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 36px;
+        color: #333333;
+      }
+
+      /* Styling for error messages */
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to the Secure File Sharing!</h1>
+    <div class="container">
+      <form action="/createRoom" method="post" onsubmit="return validateCreateRoom()">
+        <label for="create-nickname"><b>Enter Nickname:</b></label>
+        <input type="text" placeholder="Enter Nickname" name="nickname" id="create-nickname" required>
+        <span class="error-message" id="create-nickname-error"></span>
+        <input type="submit" value="Create Room">
+      </form>
+    </div>
+    <div class="container">
+      <form action="/joinRoom" method="post" onsubmit="return validateJoinRoom()">
+        <label for="join-nickname"><b>Enter Nickname:</b></label>
+        <input type="text" placeholder="Enter Nickname" name="nickname" id="join-nickname" required>
+        <span class="error-message" id="join-nickname-error"></span> <!-- Add error span for nickname -->
+        <label for="room-link"><b>Enter Room Link:</b></label>
+        <input type="text" placeholder="Enter Room Link" name="link" id="room-link" required>
+        <span class="error-message" id="room-link-error"></span> <!-- Add error span for room link -->
+        <input type="submit" value="Join Room">
+      </form>
+    </div>
+    <script>
+      function validateCreateRoom() {
+        var nickname = document.getElementById("create-nickname").value;
+        var letters = /^[A-Za-z]+$/;
+        var errorMessage = document.getElementById("create-nickname-error");
+
+        if (!nickname.match(letters)) {
+          errorMessage.innerText = "Nickname can only contain letters.";
+          return false;
+        }
+
+        errorMessage.innerText = ""; // Clear error message if validation succeeds
+        return true;
+      }
+
+      function validateJoinRoom() {
+        var nickname = document.getElementById("join-nickname").value;
+        var link = document.getElementById("room-link").value;
+        var letters = /^[A-Za-z]+$/;
+        var validLink = /^(http:\/\/localhost:8001|http:\/\/localhost:8002)$/;
+        var nicknameErrorMessage = document.getElementById("join-nickname-error");
+        var linkErrorMessage = document.getElementById("room-link-error");
+
+        if (!nickname.match(letters)) {
+          nicknameErrorMessage.innerText = "Nickname can only contain letters.";
+          return false;
+        } else {
+          nicknameErrorMessage.innerText = ""; // Clear error message if validation succeeds
+        }
+
+        if (!link.match(validLink)) {
+          linkErrorMessage.innerText = "Invalid room link.";
+          return false;
+        } else {
+          linkErrorMessage.innerText = ""; // Clear error message if validation succeeds
+        }
+
+        return true;
+      }
+    </script>
+  </body>
+</html>
